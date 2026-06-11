@@ -1,0 +1,45 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+html , body{
+    height: 100%;
+    width: 100%;
+}
+
+.box{
+    height: 100px;
+    width: 200px;
+    background-color: aqua;
+    position: absolute;
+    animation-name: moving;
+    animation-duration: 3s;
+    animation-iteration-count: infinite;
+    animation-direction:alternate;
+    animation-timing-function:ease-in-out;
+    
+}
+
+@keyframes moving{
+    0%{
+        background-color: red;
+        top: 0%;
+        left: 0%;
+    }
+    25%{
+        background-color: black;
+        top: 0;
+        left: 800px;
+    }
+    50%{
+        background-color: green;
+        top: 500px;
+
+    }
+    100%{
+        background-color: red;
+        top :500px;
+        left :0%;
+    }
+}
