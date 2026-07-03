@@ -4,9 +4,22 @@ const Login = () => {
   const [username, setusername] = useState("");
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
+  const [error, seterror] = useState()
+
 
   let handleSubmit = (e) => {
     e.preventDefault();
+
+
+    if(!username.trim() || !email.trim()  || !password.trim()){
+      seterror("all fields are required")
+      setTimeout(()=>{
+        seterror("")
+      },3000)
+      return
+    }
+
+
     console.log(username);
     console.log(email);
     console.log(password);
@@ -65,6 +78,7 @@ const Login = () => {
         <br />
 
         <button className="bg-blue-400 w-full py-2 rounded">Login</button>
+        {error && <p className="text-red-500 mt-2">{error}</p>}
       </form>
     </div>
   );
