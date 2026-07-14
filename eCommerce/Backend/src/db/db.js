@@ -3,7 +3,8 @@
 const mongoose = require("mongoose")
 
 const connectDb = ()=>{
-    mongoose.connect("mongodb://localhost:27017/Sage-bhopal")
+  
+  mongoose.connect("mongodb://localhost:27017/Sage-bhopal")
     .then(()=>{
         console.log("database connected successfully");
         
@@ -12,6 +13,9 @@ const connectDb = ()=>{
         console.log(err);
         
     })
+
+
+
 }
 
 
