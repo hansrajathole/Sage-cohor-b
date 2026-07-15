@@ -1,5 +1,6 @@
 const userModel = require("../models/user.model")
 const bcrypt = require('bcrypt');
+const jwt = require("jsonwebtoken")
 
 
 
@@ -29,8 +30,7 @@ const registerController = async (req , res) => {
         }
 
         const hashedPass = await bcrypt.hash(password,10)
-        console.log(hashedPass);
-        
+       
 
         user = await userModel.create({
             username,
@@ -72,14 +72,24 @@ const loginController = async (req , res) => {
         if(!user){
              return res.status(404).json({message : "invalid credential"})
         }
-
+        
+        
         const isMatch = await  bcrypt.compare(password , user.password)
 
         if(!isMatch){
               return res.status(400).json({message : "invalid credential"})
         }
 
-        res.status(200).json({message : "login successfully"})
+
+        const token = jwt.sign({
+            id : user._id,
+            email : user.email
+        }, "secret key")
+
+        console.log(token);
+        delete user._doc.password
+
+        res.status(200).json({message : "login successfully" ,user , token})
 
 
     } catch (error) {

@@ -6,9 +6,10 @@ const userControllers = require("../controllers/user.controller")
 
 
 const router = express.Router()
+//     port                  baseURL      Routes
+// http://localhost:8080  /v1/api/users  /register
 
-
-router.post("/register", userControllers.registerController )
+router.post("/register", userControllers.registerController)
 router.post("/login", userControllers.loginController)
 
 
