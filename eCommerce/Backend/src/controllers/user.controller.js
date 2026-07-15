@@ -84,9 +84,9 @@ const loginController = async (req , res) => {
         const token = jwt.sign({
             id : user._id,
             email : user.email
-        }, "secret key")
+        }, "secret-key")
 
-        console.log(token);
+        // console.log(token);
         delete user._doc.password
 
         res.status(200).json({message : "login successfully" ,user , token})
@@ -98,8 +98,30 @@ const loginController = async (req , res) => {
     }
 }
 
+const profileController = async (req , res ) =>{
+    try {
+
+        const userId = req.userId
+
+        const user = await userModel.findById(userId)
+
+        if(!user){
+            return res.status(404).json({message : "user not found"})
+        }
+
+        delete user._doc.password
+        res.status(200).json({message : "user profile founded" , user})
+
+        
+    } catch (error) {
+         console.log(error);
+        res.status(500).json({message : "internal server error" , error : error.message}) 
+    }
+}
+
 
 module.exports = {
     registerController,
-    loginController
+    loginController,
+    profileController
 }
