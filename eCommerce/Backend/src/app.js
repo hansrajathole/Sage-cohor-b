@@ -5,11 +5,14 @@ const userRouter = require("./routes/user.router")
 const connectDb = require("./db/db")
 const cors = require("cors")
 const morgan = require("morgan")
+const config = require("./config/config")
+require("dotenv").config()
 
 
 
 const app = express()
 connectDb()
+
 
 app.use(morgan("dev"))
 app.use(cors())
