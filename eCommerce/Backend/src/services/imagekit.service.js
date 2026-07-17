@@ -1,13 +1,11 @@
 
 
-const imageKit = require("imagekit")
+const ImageKit = require("@imagekit/nodejs")
 const config = require("../config/config")
 
 
-const imagekit = imageKit({
-    publicKey :  config.public_key,
-    privateKey : config.private_key,
-    urlEndpoint : config.url_endPoint
+const imagekit = new ImageKit({
+    privateKey : config.private_key
 })
 
 

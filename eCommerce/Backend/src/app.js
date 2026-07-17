@@ -13,6 +13,7 @@ require("dotenv").config()
 const app = express()
 connectDb()
 
+console.log(process.env.secret_key);
 
 app.use(morgan("dev"))
 app.use(cors())

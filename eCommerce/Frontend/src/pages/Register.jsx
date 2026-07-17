@@ -13,29 +13,24 @@ const Register = () => {
     e.preventDefault();
 
 
-    if(!username.trim() || !email.trim()  || !password.trim()){
-      seterror("all fields are required")
-      setTimeout(()=>{
-        seterror("")
-      },3000)
-      return
+    // if(!username.trim() || !email.trim()  || !password.trim()){
+    //   seterror("all fields are required")
+    //   setTimeout(()=>{
+    //     seterror("")
+    //   },3000)
+    //   return
+    // }
+
+    try {
+      const response = await axios.post("http://localhost:8080/v1/api/users/register", {username , email , password})
+        console.log(response);
+        
+    } catch (error) {
+      console.log(error);
+      
     }
 
-
-    await axios.post("http://localhost:8080/v1/api/users/register", {username , email , password})
-    .then((res)=>{
-        console.log(res);
-
-
-        setusername("")
-        setemail("")
-        setpassword("")
-        
-    })
-    .catch((err)=>{
-        console.log(err);
-        
-    })
+ 
 
  
   };

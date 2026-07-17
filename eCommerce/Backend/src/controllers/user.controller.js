@@ -2,8 +2,11 @@ const userModel = require("../models/user.model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const config = require("../config/config");
-const { default: mongoose } = require("mongoose");
 const imagekit = require("../services/imagekit.service");
+const { toFile } = require("@imagekit/nodejs/index.js");
+
+
+
 
 const registerController = async (req, res) => {
   try {
@@ -23,8 +26,10 @@ const registerController = async (req, res) => {
       email: email,
     });
 
-    if (user) {
-      return res.status(400).json({ message: "user allready exist" });
+    console.log(user);
+    
+    if (user){
+      return res.status(400).json({ message : "user allready exist" , user});
     }
 
     const hashedPass = await bcrypt.hash(password, 10);
@@ -35,8 +40,21 @@ const registerController = async (req, res) => {
       password: hashedPass,
     });
 
+
+      const token = jwt.sign(
+      {
+        id: user._id,
+        email: user.email,
+      },
+      config.secret_key,
+    );
+
     delete user._doc.password;
-    res.status(201).json({ message: "user register successfully", user });
+
+    res.status(201).json({ message: "user register successfully", user, token });
+
+
+    
   } catch (error) {
     console.log(error);
     res
@@ -117,28 +135,33 @@ const updateController = async (req, res) => {
   try {
     const userId = req.params.userId;
 
-    const user = await userModel.findById(userId);
+    let user = await userModel.findById(userId);
 
     if (!user) {
       return res.status(404).json({ message: "user not found" });
     }
 
-    console.log(req.file);
 
-    const file = await imagekit.upload({
-            file : req.file.buffer,
-            fileName : new mongoose.Types.ObjectId().toString("base64"),
-            isPublished : true,
-            isPrivateFile : false
-        }) 
+    console.log(req.file.buffer);
     
-      
+   const response = await imagekit.files.upload({
+      file : await toFile( req.file.buffer , req.file.originalname) ,
+      fileName : req.file.originalname
+    })
+    const imageUrl = response.url
+    
+    user = await  userModel.findByIdAndUpdate(userId , {
+      avatar : imageUrl
+    })
+    
 
-    console.log(file);
-
+    res.status(200).json({message : "update successfully" , user})
+    
 
 
   } catch (error) {
+
+    
     console.log(error);
     res
       .status(500)
